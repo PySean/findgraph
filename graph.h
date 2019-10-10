@@ -4,8 +4,8 @@
 typedef struct graph {
     //The adjacency matrix for the graph.
     bool ** adj_mat;
+    //our matrices are always len x len
     int len;
-    int width;
     //Signifies whether we have edges other than the boundary of the vg.
     bool is_base; 
 } Graph;
