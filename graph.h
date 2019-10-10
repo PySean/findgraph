@@ -32,13 +32,17 @@ GraphList * concatenate (GraphList * a, GraphList * b);
 //Generates the vg corresponding to stack s.
 Graph * fromStack(Stack * s);
 
+//Checks if graph g is a legal visibility graph by checking x property and
+//bar property.
+bool isLegal(Graph * g);
+
+//"Transposes" graph b onto graph a. Meaning, all edges in b are
+//made existent in a.
+void transpose(Graph * a, Graph * b);
+
 //Creates a set of new graphs by transposing previously computed graphs over
 //the currently computed graph g.
 GraphList * makeGraphs(Graph * g, GraphList * prevs);
-
-//Checks if graph g is a legal visibility graph by checking order claim and
-//bar property.
-bool isLegal(Graph * g);
 
 //Operations for deleting a single graph or a list of them.
 void deleteGraph(Graph * g);

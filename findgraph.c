@@ -21,7 +21,6 @@ void findgraphs(int max_vertices) {
         memset(s, 0, sizeof(Stack));
         bool popped = false;
         do {
-            //fprintf(stderr, "yolo!\n");
             if (popped) {
                 if (top(s) == 0) {
                     setTop(s, true);
@@ -34,7 +33,6 @@ void findgraphs(int max_vertices) {
             }
             else {
                 s = push(s, false);
-                //fprintf(stderr, "In else clause.\n");
                 if (s->n > i) {
                     //fprintf(stderr, "does this happen\n");
                     combination++;
