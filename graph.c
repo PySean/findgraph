@@ -1,6 +1,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "graph.h"
+
+//Allocates & initializes a graphlist with the specified graph g.
+GraphList * makeGraphListSingleton(Graph * g);
 
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices) {
@@ -21,8 +25,39 @@ Graph * makeGraph(int num_vertices) {
     return g;
 }
 
-//Appends GraphList b to GraphList a.
-GraphList * append (GraphList * a, GraphList * b) {
+//Allocates & initializes an empty GraphList.
+GraphList * makeGraphList() {
+    GraphList * gl = malloc(sizeof(GraphList));
+    memset(gl, 0, sizeof(GraphList));
+    return gl;
+}
+
+//Allocates & initializes a graphlist with the specified graph g.
+GraphList * makeGraphListSingleton(Graph * g) {
+    GraphList * gl = makeGraphList();
+    gl->g = g;
+    return gl;
+}
+
+//Tacks a Graph g to the end of GraphList gl.
+void append(Graph * g, GraphList * gl) {
+    if (gl->g == NULL) {
+        gl->g = g;
+    }
+    else if (gl->end == NULL){
+        gl->next = makeGraphListSingleton(g);
+        gl->next->prev = gl;
+        gl->end = gl->next;
+    }
+    else {
+        gl->end->next = makeGraphListSingleton(g);
+        gl->end->next->prev = gl->end;
+        gl->end = gl->end->next;
+    }
+}
+
+//Concatenates GraphList b to GraphList a.
+GraphList * concatenate (GraphList * a, GraphList * b) {
     GraphList * beginning = a;
     //Seek to the end of a.
     while(a->next != NULL)

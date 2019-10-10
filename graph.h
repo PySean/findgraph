@@ -14,13 +14,20 @@ typedef struct graphlist {
     struct graphlist * prev;
     Graph * g;
     struct graphlist * next;
+    struct graphlist * end;
 } GraphList;
 
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices);
 
-//Appends GraphList b to GraphList a.
-GraphList * append (GraphList * a, GraphList * b);
+//Allocates & initializes an empty GraphList.
+GraphList * makeGraphList();
+
+//Tacks a Graph g to the end of GraphList gl.
+void append(Graph * g, GraphList * gl);
+
+//Glues GraphList b to the end of GraphList a.
+GraphList * concatenate (GraphList * a, GraphList * b);
 
 //Generates the vg corresponding to stack s.
 Graph * fromStack(Stack * s);
