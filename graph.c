@@ -9,6 +9,12 @@ GraphList * makeGraphListSingleton(Graph * g);
 //Determines whether the x-property (order claim) holds for graph g,
 //and fixes the errors if any arise.
 void x_property(Graph * g);
+
+//Determines if the graph is *still* broken after fixing order claim violations.
+//Best to call this immediately after "x_property" (since fixing x-property
+//can cause bar property violations.)
+bool bar_property(Graph * g);
+
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices) {
     Graph * g = malloc(sizeof(Graph));
@@ -102,6 +108,30 @@ Graph * fromStack(Stack * s) {
     return new;
 }
 
+//Determines if the graph is *still* broken after fixing order claim violations.
+//Best to call this immediately after "x_property" (since fixing x-property
+//can cause bar property violations.)
+bool bar_property(Graph * g) {
+    int i = 0;
+    for (i; i < g->len; i++) {
+        bool not_broken = false;
+        int j = 0;
+        for (j = i + 3; j < g->len; j++) {
+            if (g->adj_mat[i][j] == true) {
+                //If any of our vertices k don't break the property, 
+                //i and j are good.
+                int k = 0;
+                for (k = i + 1; k < j; k++) {
+                    not_broken = not_broken || (g->adj_mat[i][k] && g->adj_mat[j][k]);
+                }
+                if (not_broken == false)
+                    return false;
+            }
+        }
+    }
+    return true;
+}
+
 void x_property(Graph * g) {
     //Can store the maximum possible number of x-property violating
     //vertices here.
@@ -122,7 +152,8 @@ void x_property(Graph * g) {
         int j = 0;
         for (j = leftmost + 1; j < n; j++) {
             if (g->adj_mat[i][j] == true) {
-                illegal_vertices[illegal_ndx++] = i;
+                illegal_vertices[illegal_ndx] = i;
+                illegal_ndx++;
                 break;
             }
         }
@@ -140,7 +171,8 @@ void x_property(Graph * g) {
 //doesn't if it cannot.
 bool fixGraph(Graph * g) {
     bool is_legal = false;
-    //is_legal = is_legal && bar_property(g);
+    x_property(g);
+    is_legal = bar_property(g);
     return is_legal;
 }
 
