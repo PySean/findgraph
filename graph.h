@@ -4,7 +4,7 @@
 typedef struct graph {
     //The adjacency matrix for the graph.
     bool ** adj_mat;
-    //our matrices are always len x len
+    //our matrices are always len x len (since they are adjacency matrices)
     int len;
     //Signifies whether we have edges other than the boundary of the vg.
     bool is_base; 
@@ -20,6 +20,9 @@ typedef struct graphlist {
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices);
 
+//Copies the graph g and returns the newly allocated copy.
+Graph * graphCopy(Graph * g);
+
 //Allocates & initializes an empty GraphList.
 GraphList * makeGraphList();
 
@@ -34,7 +37,7 @@ Graph * fromStack(Stack * s);
 
 //Checks if graph g is a legal visibility graph by checking x property and
 //bar property.
-bool isLegal(Graph * g);
+bool fixGraph(Graph * g);
 
 //"Transposes" graph b onto graph a. Meaning, all edges in b are
 //made existent in a.

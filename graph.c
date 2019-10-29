@@ -25,6 +25,20 @@ Graph * makeGraph(int num_vertices) {
     return g;
 }
 
+//Copies the graph g and returns the newly allocated copy.
+Graph * graphCopy(Graph * g) {
+    Graph * new = makeGraph(g->len);
+    int i = 0;
+    for (i = 0; i < g->len; i++) {
+        int j = 0;
+        for (j = 0; j < g->len; j++) {
+            new->adj_mat[i][j] = g->adj_mat[i][j];
+        }
+    }
+    return new;
+}
+
+
 //Allocates & initializes an empty GraphList.
 GraphList * makeGraphList() {
     GraphList * gl = malloc(sizeof(GraphList));
@@ -85,10 +99,15 @@ Graph * fromStack(Stack * s) {
     return new;
 }
 
-//Checks if graph g is a legal visibility graph by checking order claim and
-//bar property.
-bool isLegal(Graph * g) {
-    
+//Checks if graph g is a legal visibility graph by checking x-property and
+//bar property. Makes the requisite changes if the graph can be fixed, and
+//doesn't if it cannot.
+bool fixGraph(Graph * g, int index) {
+    bool is_legal = false;
+    is_legal = x_property(g);
+    //Fix order claim (x-property) error if is_legal is false.
+    is_legal = is_legal && bar_property(g);
+    return is_legal;
 }
 
 //"Transposes" graph b onto graph a. Meaning, all edges in b are
