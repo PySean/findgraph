@@ -6,6 +6,9 @@
 //Allocates & initializes a graphlist with the specified graph g.
 GraphList * makeGraphListSingleton(Graph * g);
 
+//Determines whether the x-property (order claim) holds for graph g,
+//and fixes the errors if any arise.
+void x_property(Graph * g);
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices) {
     Graph * g = malloc(sizeof(Graph));
@@ -99,14 +102,45 @@ Graph * fromStack(Stack * s) {
     return new;
 }
 
+void x_property(Graph * g) {
+    //Can store the maximum possible number of x-property violating
+    //vertices here.
+    int * illegal_vertices = malloc(sizeof(int) * (g->len - 3));
+    int illegal_ndx = 0;
+    memset(illegal_vertices, '0', g->len);
+    //Find the leftmost vertex that vertex n sees.
+    int n = g->len;
+    int i = n - 1;
+    int leftmost = -1;
+    for (i; i > 0; i--) {
+        if (g->adj_mat[n][i] == true)
+            leftmost = i;
+    }
+    //Scan from right to left, beginning at the leftmost vertex-1, determining
+    //all indices that break the x-property.
+    for (i = leftmost - 1; i > 0; i--) {
+        int j = 0;
+        for (j = leftmost + 1; j < n; j++) {
+            if (g->adj_mat[i][j] == true) {
+                illegal_vertices[illegal_ndx++] = i;
+                break;
+            }
+        }
+    }
+    //Fix order claim for each illegal vertex.
+    for (i = 0; i < illegal_ndx; i++) {
+        g->adj_mat[i][n] = true;
+        g->adj_mat[n][i] = true;
+    }
+    free(illegal_vertices);
+}
+
 //Checks if graph g is a legal visibility graph by checking x-property and
 //bar property. Makes the requisite changes if the graph can be fixed, and
 //doesn't if it cannot.
-bool fixGraph(Graph * g, int index) {
+bool fixGraph(Graph * g) {
     bool is_legal = false;
-    is_legal = x_property(g);
-    //Fix order claim (x-property) error if is_legal is false.
-    is_legal = is_legal && bar_property(g);
+    //is_legal = is_legal && bar_property(g);
     return is_legal;
 }
 
