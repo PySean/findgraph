@@ -30,6 +30,7 @@ Graph * makeGraph(int num_vertices) {
     //Initialize the visibilities. Nth vertex sees vertex n+1.
     for (i = 0; i < num_vertices - 1; i++) {
         g->adj_mat[i][i+1] = true;
+        g->adj_mat[i+1][i] = true;
     }
     return g;
 }
@@ -108,30 +109,6 @@ Graph * fromStack(Stack * s) {
     return new;
 }
 
-//Determines if the graph is *still* broken after fixing order claim violations.
-//Best to call this immediately after "x_property" (since fixing x-property
-//can cause bar property violations.)
-bool bar_property(Graph * g) {
-    int i = 0;
-    for (i; i < g->len; i++) {
-        bool not_broken = false;
-        int j = 0;
-        for (j = i + 3; j < g->len; j++) {
-            if (g->adj_mat[i][j] == true) {
-                //If any of our vertices k don't break the property, 
-                //i and j are good.
-                int k = 0;
-                for (k = i + 1; k < j; k++) {
-                    not_broken = not_broken || (g->adj_mat[i][k] && g->adj_mat[j][k]);
-                }
-                if (not_broken == false)
-                    return false;
-            }
-        }
-    }
-    return true;
-}
-
 void x_property(Graph * g) {
     //Can store the maximum possible number of x-property violating
     //vertices here.
@@ -164,6 +141,30 @@ void x_property(Graph * g) {
         g->adj_mat[n][i] = true;
     }
     free(illegal_vertices);
+}
+
+//Determines if the graph is *still* broken after fixing order claim violations.
+//Best to call this immediately after "x_property" (since fixing x-property
+//can cause bar property violations.)
+bool bar_property(Graph * g) {
+    int i = 0;
+    for (i; i < g->len; i++) {
+        bool not_broken = false;
+        int j = 0;
+        for (j = i + 3; j < g->len; j++) {
+            if (g->adj_mat[i][j] == true) {
+                //If any of our vertices k don't break the property, 
+                //i and j are good.
+                int k = 0;
+                for (k = i + 1; k < j; k++) {
+                    not_broken = not_broken || (g->adj_mat[i][k] && g->adj_mat[j][k]);
+                }
+                if (not_broken == false)
+                    return false;
+            }
+        }
+    }
+    return true;
 }
 
 //Checks if graph g is a legal visibility graph by checking x-property and
