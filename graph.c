@@ -14,7 +14,7 @@ Graph * makeGraph(int num_vertices, int max_len) {
 
     for (i; i < num_vertices; i++) {
         g->adj_mat[i] = malloc(sizeof(bool) * max_len);
-        memset(g->adj_mat[i], '0', sizeof(bool) * max_len);
+        memset(g->adj_mat[i], 0, sizeof(bool) * max_len);
     }
 
     g->is_base = true;
@@ -46,7 +46,7 @@ Graph * graphCopy(Graph * g) {
 //Allocates & initializes an empty GraphList.
 GraphList * makeGraphList() {
     GraphList * gl = malloc(sizeof(GraphList));
-    memset(gl, '0', sizeof(GraphList));
+    memset(gl, 0, sizeof(GraphList));
     return gl;
 }
 
@@ -92,14 +92,15 @@ void x_property(Graph * g) {
     //vertices here.
     int * illegal_vertices = malloc(sizeof(int) * (g->len - 3));
     int illegal_ndx = 0;
-    memset(illegal_vertices, '0', g->len);
+    memset(illegal_vertices, 0, sizeof(int) * (g->len - 3));
     //Find the leftmost vertex that vertex n sees.
-    int n = g->len;
+    int n = g->len - 1;
     int i = n - 1;
     int leftmost = -1;
-    for (i; i > 0; i--) {
-        if (g->adj_mat[n][i] == true)
+    for (i; i > -1; i--) {
+        if (g->adj_mat[n][i] == true) {
             leftmost = i;
+        }
     }
     //Scan from right to left, beginning at the leftmost vertex-1, determining
     //all indices that break the x-property.
