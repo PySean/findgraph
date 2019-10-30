@@ -35,6 +35,15 @@ void append(Graph * g, GraphList * gl);
 //Glues GraphList b to the end of GraphList a.
 GraphList * concatenate (GraphList * a, GraphList * b);
 
+//Determines whether the x-property (order claim) holds for graph g,
+//and fixes the errors if any arise.
+void x_property(Graph * g);
+
+//Determines if the graph is *still* broken after fixing order claim violations.
+//Best to call this immediately after "x_property" (since fixing x-property
+//can cause bar property violations.)
+bool bar_property(Graph * g);
+
 //Checks if graph g is a legal visibility graph by checking x property and
 //bar property.
 bool fixGraph(Graph * g);

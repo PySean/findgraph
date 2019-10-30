@@ -6,15 +6,6 @@
 //Allocates & initializes a graphlist with the specified graph g.
 GraphList * makeGraphListSingleton(Graph * g);
 
-//Determines whether the x-property (order claim) holds for graph g,
-//and fixes the errors if any arise.
-void x_property(Graph * g);
-
-//Determines if the graph is *still* broken after fixing order claim violations.
-//Best to call this immediately after "x_property" (since fixing x-property
-//can cause bar property violations.)
-bool bar_property(Graph * g);
-
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices, int max_len) {
     Graph * g = malloc(sizeof(Graph));
