@@ -6,6 +6,9 @@ typedef struct graph {
     bool ** adj_mat;
     //our matrices are always len x len (since they are adjacency matrices)
     int len;
+    //The maximal length for a graph. Allows for extending the length of a graph
+    //up to this length.
+    int max_len;
     //Signifies whether we have edges other than the boundary of the vg.
     bool is_base; 
 } Graph;
@@ -18,7 +21,7 @@ typedef struct graphlist {
 } GraphList;
 
 //Allocates & initializes a basic terrain vg with num_vertices.
-Graph * makeGraph(int num_vertices);
+Graph * makeGraph(int num_vertices, int max_len);
 
 //Copies the graph g and returns the newly allocated copy.
 Graph * graphCopy(Graph * g);
@@ -31,9 +34,6 @@ void append(Graph * g, GraphList * gl);
 
 //Glues GraphList b to the end of GraphList a.
 GraphList * concatenate (GraphList * a, GraphList * b);
-
-//Generates the vg corresponding to stack s.
-Graph * fromStack(Stack * s);
 
 //Checks if graph g is a legal visibility graph by checking x property and
 //bar property.

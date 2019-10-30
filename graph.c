@@ -16,16 +16,19 @@ void x_property(Graph * g);
 bool bar_property(Graph * g);
 
 //Allocates & initializes a basic terrain vg with num_vertices.
-Graph * makeGraph(int num_vertices) {
+Graph * makeGraph(int num_vertices, int max_len) {
     Graph * g = malloc(sizeof(Graph));
     int i = 0;
-    g->adj_mat = malloc(sizeof(bool *) * num_vertices);
+    g->adj_mat = malloc(sizeof(bool *) * max_len);
 
-    for (i; i < num_vertices; i++)
-        g->adj_mat[i] = malloc(sizeof(bool) * num_vertices);
+    for (i; i < num_vertices; i++) {
+        g->adj_mat[i] = malloc(sizeof(bool) * max_len);
+        memset(g->adj_mat[i], '0', sizeof(bool) * max_len);
+    }
 
     g->is_base = true;
     g->len = num_vertices;
+    g->max_len = max_len;
     
     //Initialize the visibilities. Nth vertex sees vertex n+1.
     for (i = 0; i < num_vertices - 1; i++) {
@@ -37,7 +40,7 @@ Graph * makeGraph(int num_vertices) {
 
 //Copies the graph g and returns the newly allocated copy.
 Graph * graphCopy(Graph * g) {
-    Graph * new = makeGraph(g->len);
+    Graph * new = makeGraph(g->len, g->max_len);
     int i = 0;
     for (i = 0; i < g->len; i++) {
         int j = 0;
@@ -52,7 +55,7 @@ Graph * graphCopy(Graph * g) {
 //Allocates & initializes an empty GraphList.
 GraphList * makeGraphList() {
     GraphList * gl = malloc(sizeof(GraphList));
-    memset(gl, 0, sizeof(GraphList));
+    memset(gl, '0', sizeof(GraphList));
     return gl;
 }
 
@@ -91,22 +94,6 @@ GraphList * concatenate (GraphList * a, GraphList * b) {
         b = b->prev;
     a->next = b;
     return beginning;
-}
-
-//Generates the vg corresponding to stack s.
-//s should be pointing to the top of the stack so s->n is the number of
-//vertices.
-Graph * fromStack(Stack * s) {
-    Graph * new = makeGraph(s->n);
-    Stack * head = bottom(s);
-    while (head != NULL) {
-        if (head->connect == true) {
-            new->adj_mat[head->n][s->n] = true;
-            new->is_base = false;
-        }
-        head = head->next;
-    }
-    return new;
 }
 
 void x_property(Graph * g) {
