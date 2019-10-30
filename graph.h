@@ -39,14 +39,6 @@ Graph * fromStack(Stack * s);
 //bar property.
 bool fixGraph(Graph * g);
 
-//"Transposes" graph b onto graph a. Meaning, all edges in b are
-//made existent in a.
-void transpose(Graph * a, Graph * b);
-
-//Creates a set of new graphs by transposing previously computed graphs over
-//the currently computed graph g.
-GraphList * makeGraphs(Graph * g, GraphList * prevs);
-
 //Operations for deleting a single graph or a list of them.
 void deleteGraph(Graph * g);
 
