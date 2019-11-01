@@ -24,21 +24,24 @@ void findgraphs(int max_vertices, char * filename) {
     //Newly generated graphs.
     GraphList * news = makeGraphList();
     int i = 0;
-    for (i = MIN_VERTICES; i <= max_vertices; i++) {
+    GraphList * curr;
+    for (i = MIN_VERTICES - 1; i < max_vertices - 1; i++) {
         Graph * prev = NULL;
         GraphList * curr = NULL;
-        for (curr = prevs; curr != NULL; curr = prevs->next) {
+
+        for (curr = prevs; curr != NULL; curr = curr->next) {
             prev = curr->g;
             //Extend the previously computed graph by a vertex and edge.
-            prev->adj_mat[prev->len - 1][prev->len] = true;
-            prev->adj_mat[prev->len][prev->len - 1] = true;
+            prev->adj_mat[i][i+1] = true;
+            prev->adj_mat[i+1][i] = true;
             prev->len++;
             //We begin at the third vertex from the right, since we
             //only care about adding new edges to vertex n.
-            graph_gen(prev, news, i - 2, false);
+            graph_gen(prev, news, prev->len - 3, false);
         }
         //NOTE: Might need a threshold for writing graphs if they occupy too much
         //memory.
+        fprintf(stderr, "outside inner for loop.\n");
         writeGraphs(news, filename);
         deleteGraphs(prevs);
         GraphList * temp = news;
