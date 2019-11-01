@@ -12,6 +12,7 @@
     "findgraph.c", by Sean Soderman
     Determines all possible visibility graphs.
 */
+void graph_gen(Graph * prev, GraphList * news, int vert, bool checkVert);
 void findgraphs(int max_vertices, char * filename) {
     //First: Initialize an initial graphlist of graphs with n = 3.
     GraphList * prevs = makeGraphList();
@@ -34,7 +35,7 @@ void findgraphs(int max_vertices, char * filename) {
             prev->len++;
             //We begin at the third vertex from the right, since we
             //only care about adding new edges to vertex n.
-            graph_gen(prev, news, i - 2);
+            graph_gen(prev, news, i - 2, false);
         }
         //NOTE: Might need a threshold for writing graphs if they occupy too much
         //memory.
@@ -49,12 +50,27 @@ void findgraphs(int max_vertices, char * filename) {
 /**
     From a list of graphs with n-1 vertices in "prevs", generates a new
     list of graphs with n+1 vertices.
+
+    "checkVert": true when we have added a new edge. False otherwise.
 */
-void graph_gen(Graph * prev, GraphList * news, int vert) {
-    if (vert < 0)
+void graph_gen(Graph * prev, GraphList * news, int vert, bool checkVert) {
+    //TODO: Need to check legality of graph after it is fixed.
+    if (checkVert == true) {
+        bool legal = fixGraph(prev);
+        //No legal graph can be generated from an illegal graph, so we
+        //stop here if we fail the bar property after fixing the x-property.
+        if (legal == false)
+            return;
+    }
+    if (vert < 0) {
+        append(prev, news);
         return;
-    //First. Fix the graph, if possible. If not possible, we return.
-    //Path 1: edge (vert, n) is picked, we check if it is OK.
-
-
+    }
+    Graph * clean = graphCopy(prev);
+    //Only recur to the left if we don't have a new edge to add for this spot.
+    if (prev->adj_mat[vert][prev->len - 1] != true) {
+        prev->adj_mat[vert][prev->len - 1] = true;
+        graph_gen(prev, news, vert - 1, true);
+    }
+    graph_gen(clean, news, vert - 1, false);
 }

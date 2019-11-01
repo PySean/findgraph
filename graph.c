@@ -132,7 +132,7 @@ bool bar_property(Graph * g) {
         int j = 0;
         for (j = i + 3; j < g->len; j++) {
             if (g->adj_mat[i][j] == true) {
-                //If any of our vertices k don't break the property, 
+                //If any of our vertices k don't break the property,
                 //i and j are good.
                 int k = 0;
                 for (k = i + 1; k < j; k++) {

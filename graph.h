@@ -52,3 +52,6 @@ bool fixGraph(Graph * g);
 void deleteGraph(Graph * g);
 
 void deleteGraphs(GraphList * gl);
+
+//Writes a graph to the file specified by filename. Writes in append (w+) mode.
+void writeGraphs(GraphList * gl, char * filename);
