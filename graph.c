@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -157,6 +158,35 @@ bool fixGraph(Graph * g) {
 }
 
 //Operations for deleting a single graph or a list of them.
-void deleteGraph(Graph * g);
+void deleteGraph(Graph * g) {
+    memset(g, 0, sizeof(Graph));
+    free(g);
+}
 
-void deleteGraphs(GraphList * gl);
+void deleteGraphs(GraphList * gl) {
+    GraphList * curr = gl->end;
+    for (curr; curr != NULL; curr = curr->prev) {
+        deleteGraph(curr->g);
+    }
+}
+
+//Writes a list of graphs to the file specified by filename. 
+//Writes in append (w+) mode.
+void writeGraphs(GraphList * gl, char * filename) {
+    GraphList * curr = gl;
+    FILE * file = fopen(filename, "w+");
+    for (curr; curr != NULL; curr = curr->next) {
+        Graph * g = curr->g;
+        int i = 0;
+        for (i; i < g->len; i++) {
+            int j = 0;
+            //Vertices don't see themselves, and each edge is bidirectional.
+            for (j = i+1; j < g->len; j++) {
+                if (g->adj_mat[i][j] == true) {
+                    //Output format is v1 v2\n
+                    fprintf(file, "%d %d\n", i, j);
+                }
+            }
+        }
+    }
+}

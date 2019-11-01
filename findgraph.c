@@ -30,8 +30,8 @@ void findgraphs(int max_vertices, char * filename) {
         for (curr = prevs; curr != NULL; curr = prevs->next) {
             prev = curr->g;
             //Extend the previously computed graph by a vertex and edge.
-            prev->adj_mat[prev->len][prev->len + 1] = true;
-            prev->adj_mat[prev->len + 1][prev->len] = true;
+            prev->adj_mat[prev->len - 1][prev->len] = true;
+            prev->adj_mat[prev->len][prev->len - 1] = true;
             prev->len++;
             //We begin at the third vertex from the right, since we
             //only care about adding new edges to vertex n.
@@ -54,7 +54,6 @@ void findgraphs(int max_vertices, char * filename) {
     "checkVert": true when we have added a new edge. False otherwise.
 */
 void graph_gen(Graph * prev, GraphList * news, int vert, bool checkVert) {
-    //TODO: Need to check legality of graph after it is fixed.
     if (checkVert == true) {
         bool legal = fixGraph(prev);
         //No legal graph can be generated from an illegal graph, so we
