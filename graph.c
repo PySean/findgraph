@@ -13,7 +13,7 @@ Graph * makeGraph(int num_vertices, int max_len) {
     int i = 0;
     g->adj_mat = malloc(sizeof(bool *) * max_len);
 
-    for (i; i < num_vertices; i++) {
+    for (i; i < max_len; i++) {
         g->adj_mat[i] = malloc(sizeof(bool) * max_len);
         memset(g->adj_mat[i], 0, sizeof(bool) * max_len);
     }
