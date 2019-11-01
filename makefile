@@ -16,4 +16,4 @@ graph.o: graph.c
 	gcc -c graph.c
 
 clean:
-	rm $(objects) run
+	rm $(objects) run testfile

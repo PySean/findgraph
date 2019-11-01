@@ -188,5 +188,7 @@ void writeGraphs(GraphList * gl, char * filename) {
                 }
             }
         }
+        fprintf(file, "---\n");
     }
+    fclose(file);
 }
