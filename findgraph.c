@@ -28,7 +28,6 @@ void findgraphs(int max_vertices, char * filename) {
     for (i = MIN_VERTICES - 1; i < max_vertices; i++) {
         Graph * prev = NULL;
         GraphList * curr = NULL;
-
         for (curr = prevs; curr != NULL; curr = curr->next) {
             prev = curr->g;
             //Extend the previously computed graph by a vertex and edge.
@@ -37,17 +36,20 @@ void findgraphs(int max_vertices, char * filename) {
             prev->len++;
             //We begin at the third vertex from the right, since we
             //only care about adding new edges to vertex n.
-            graph_gen(prev, news, prev->len - 3, false);
+            //We also copy prev, so the ptr doesn't get cleared in news
+            //when we delete all prevs.
+            graph_gen(graphCopy(prev), news, prev->len - 3, false);
         }
         //NOTE: Might need a threshold for writing graphs if they occupy too much
         //memory.
+        GraphList * purr = NULL;
         writeGraphs(news, filename);
         deleteGraphs(prevs);
-        fprintf(stderr, "Call during %d\n", i);
         GraphList * temp = news;
         news = prevs;
         prevs = temp;
     }
+    deleteGraphs(prevs);
 }
 
 /**
