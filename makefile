@@ -4,16 +4,16 @@ run: $(objects)
 	gcc -o run $(objects)
 
 main.o: main.c
-	gcc -c main.c
+	gcc -g -c main.c
 
 findgraph.o: findgraph.c
-	gcc -c findgraph.c
+	gcc -g -c findgraph.c
 
 stack.o: stack.c
-	gcc -c stack.c
+	gcc -g -c stack.c
 
 graph.o: graph.c
-	gcc -c graph.c
+	gcc -g -c graph.c
 
 clean:
 	rm $(objects) run testfile

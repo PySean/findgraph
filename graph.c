@@ -182,6 +182,7 @@ void deleteGraphs(GraphList * gl) {
             curr->next = NULL;
         }
     }
+    gl->end = NULL;
 }
 
 //Writes a list of graphs to the file specified by filename. 
