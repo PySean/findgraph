@@ -159,6 +159,13 @@ bool fixGraph(Graph * g) {
 
 //Operations for deleting a single graph or a list of them.
 void deleteGraph(Graph * g) {
+    int i = 0;
+    for (i; i < g->max_len; i++) {
+        memset(g->adj_mat[i], 0, sizeof(bool) * g->max_len);
+        free(g->adj_mat[i]);
+    }
+    memset(g->adj_mat, 0, sizeof(bool) * g->max_len);
+    free(g->adj_mat);
     memset(g, 0, sizeof(Graph));
     free(g);
 }
@@ -167,6 +174,13 @@ void deleteGraphs(GraphList * gl) {
     GraphList * curr = gl->end;
     for (curr; curr != NULL; curr = curr->prev) {
         deleteGraph(curr->g);
+        curr->g = NULL;
+        if (curr->next != NULL) {
+            curr->next->prev = NULL;
+            memset(curr->next, 0, sizeof(GraphList));
+            free(curr->next);
+            curr->next = NULL;
+        }
     }
 }
 
