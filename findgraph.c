@@ -50,6 +50,8 @@ void findgraphs(int max_vertices, char * filename) {
         prevs = temp;
     }
     deleteGraphs(prevs);
+    free(prevs);
+    free(news);
 }
 
 /**
@@ -63,8 +65,10 @@ void graph_gen(Graph * prev, GraphList * news, int vert, bool checkVert) {
         bool legal = fixGraph(prev);
         //No legal graph can be generated from an illegal graph, so we
         //stop here if we fail the bar property after fixing the x-property.
-        if (legal == false)
+        if (legal == false) {
+            deleteGraph(prev);
             return;
+        }
     }
     if (vert < 0) {
         append(prev, news);
