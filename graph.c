@@ -105,7 +105,7 @@ void x_property(Graph * g) {
     }
     //Scan from right to left, beginning at the leftmost vertex-1, determining
     //all indices that break the x-property.
-    for (i = leftmost - 1; i > 0; i--) {
+    for (i = leftmost - 1; i > -1; i--) {
         int j = 0;
         for (j = leftmost + 1; j < n; j++) {
             if (g->adj_mat[i][j] == true) {
@@ -117,8 +117,9 @@ void x_property(Graph * g) {
     }
     //Fix order claim for each illegal vertex.
     for (i = 0; i < illegal_ndx; i++) {
-        g->adj_mat[i][n] = true;
-        g->adj_mat[n][i] = true;
+        int ill_vert = illegal_vertices[i];
+        g->adj_mat[ill_vert][n] = true;
+        g->adj_mat[n][ill_vert] = true;
     }
     free(illegal_vertices);
 }
