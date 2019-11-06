@@ -78,6 +78,7 @@ void graph_gen(Graph * prev, GraphList * news, int vert, bool checkVert) {
     //Only recur to the left if we don't have a new edge to add for this spot.
     if (prev->adj_mat[vert][prev->len - 1] != true) {
         prev->adj_mat[vert][prev->len - 1] = true;
+        prev->adj_mat[prev->len - 1][vert] = true;
         graph_gen(prev, news, vert - 1, true);
     }
     graph_gen(clean, news, vert - 1, false);
