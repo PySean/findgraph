@@ -133,7 +133,7 @@ void x_property(Graph * g) {
     int i = n - 1;
     int leftmost = -1;
     for (i; i > -1; i--) {
-        if (g->adj_mat[n][i] == true) {
+        if (getBit(g->adj_mat, n, i) == true) {
             leftmost = i;
         }
     }
