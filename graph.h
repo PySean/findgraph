@@ -3,7 +3,7 @@
 
 typedef struct graph {
     //The adjacency matrix for the graph.
-    bool ** adj_mat;
+    char ** adj_mat;
     //our matrices are always len x len (since they are adjacency matrices)
     int len;
     //The maximal length for a graph. Allows for extending the length of a graph
@@ -17,6 +17,12 @@ typedef struct graphlist {
     struct graphlist * next;
     struct graphlist * end;
 } GraphList;
+
+//Sets bit j within row i of matrix adj_mat to val.
+void setBit(char ** adj_mat, int i, int j, char val);
+
+//Returns value of bit i,j within matrix adj_mat.
+char getBit(char ** adj_mat, int i, int j);
 
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices, int max_len);

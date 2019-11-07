@@ -6,16 +6,51 @@
 
 //Allocates & initializes a graphlist with the specified graph g.
 GraphList * makeGraphListSingleton(Graph * g);
+//Computes correct byte and bit offsets within a row of our adjacency matrix.
+void comp_indices(int j, int * byte, int * bit);
+
+void comp_indices(int j, int * byte, int * bit) {
+    *byte = j / 8;
+    *bit = j % 8;
+}
+
+
+//Sets bit j within row i of matrix adj_mat to val.
+void setBit(char ** adj_mat, int i, int j, char val) {
+    int jbyte = 0, jbit = 0;
+    comp_indices(j, &jbyte, &jbit);
+    char * byte = adj_mat[i] + jbyte;
+    char mask = true;
+    if (val == true) {
+        *byte = (mask << jbit) | *byte;
+    }
+    else {
+        *byte = ~(mask << jbit) & *byte;
+    }
+}
+
+//Returns value of bit i,j within matrix adj_mat.
+char getBit(char ** adj_mat, int i, int j) {
+    int jbyte = 0, jbit = 0;
+    comp_indices(j, &jbyte, &jbit);
+    char * byte = adj_mat[i] + jbyte;
+    char mask = true;
+    mask <<= jbit;
+    return (mask & *byte) > 0;
+}
+
 
 //Allocates & initializes a basic terrain vg with num_vertices.
 Graph * makeGraph(int num_vertices, int max_len) {
     Graph * g = malloc(sizeof(Graph));
     int i = 0;
-    g->adj_mat = malloc(sizeof(bool *) * max_len);
+    g->adj_mat = malloc(sizeof(char *) * max_len);
 
     for (i; i < max_len; i++) {
-        g->adj_mat[i] = malloc(sizeof(bool) * max_len);
-        memset(g->adj_mat[i], 0, sizeof(bool) * max_len);
+        //Compute number of columns to hold number of bits required for graph.
+        int num_cols = (( (max_len - 1 ) / 8 ) + 1);
+        g->adj_mat[i] = malloc(sizeof(char) * num_cols);
+        memset(g->adj_mat[i], 0, sizeof(char) * num_cols);
     }
 
     g->len = num_vertices;
@@ -23,8 +58,10 @@ Graph * makeGraph(int num_vertices, int max_len) {
     
     //Initialize the visibilities. Nth vertex sees vertex n+1.
     for (i = 0; i < num_vertices - 1; i++) {
-        g->adj_mat[i][i+1] = true;
-        g->adj_mat[i+1][i] = true;
+        setBit(g->adj_mat, i, i+1, true);
+        setBit(g->adj_mat, i+1, i, true);
+        //g->adj_mat[i][i+1] = true;
+        //g->adj_mat[i+1][i] = true;
     }
     return g;
 }
