@@ -18,8 +18,8 @@ void findgraphs(int max_vertices, char * filename) {
     GraphList * prevs = makeGraphList();
     Graph * init = makeGraph(3, max_vertices);
     append(graphCopy(init), prevs);
-    init->adj_mat[0][2] = true;
-    init->adj_mat[2][0] = true;
+    setBit(init->adj_mat, 0, 2, true);
+    setBit(init->adj_mat, 2, 0, true);
     append(init, prevs);
     //Newly generated graphs.
     GraphList * news = makeGraphList();
@@ -31,8 +31,8 @@ void findgraphs(int max_vertices, char * filename) {
         for (curr = prevs; curr != NULL; curr = curr->next) {
             prev = curr->g;
             //Extend the previously computed graph by a vertex and edge.
-            prev->adj_mat[i-1][i] = true;
-            prev->adj_mat[i][i-1] = true;
+            setBit(prev->adj_mat, i-1, i, true);
+            setBit(prev->adj_mat, i, i-1, true);
             prev->len++;
             //We begin at the third vertex from the right, since we
             //only care about adding new edges to vertex n.
@@ -76,10 +76,12 @@ void graph_gen(Graph * prev, GraphList * news, int vert, bool checkVert) {
     }
     Graph * clean = graphCopy(prev);
     //Only recur to the left if we don't have a new edge to add for this spot.
-    if (prev->adj_mat[vert][prev->len - 1] != true) {
-        prev->adj_mat[vert][prev->len - 1] = true;
-        prev->adj_mat[prev->len - 1][vert] = true;
+    if (getBit(prev->adj_mat, vert, prev->len - 1) != true) {
+
+        setBit(prev->adj_mat, vert, prev->len - 1, true);
+        setBit(prev->adj_mat, prev->len - 1, vert, true);
         graph_gen(prev, news, vert - 1, true);
+
     }
     graph_gen(clean, news, vert - 1, false);
 }
