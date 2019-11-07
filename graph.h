@@ -9,8 +9,6 @@ typedef struct graph {
     //The maximal length for a graph. Allows for extending the length of a graph
     //up to this length.
     int max_len;
-    //Signifies whether we have edges other than the boundary of the vg.
-    bool is_base; 
 } Graph;
 
 typedef struct graphlist {

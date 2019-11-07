@@ -18,7 +18,6 @@ Graph * makeGraph(int num_vertices, int max_len) {
         memset(g->adj_mat[i], 0, sizeof(bool) * max_len);
     }
 
-    g->is_base = true;
     g->len = num_vertices;
     g->max_len = max_len;
     
