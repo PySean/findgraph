@@ -60,8 +60,6 @@ Graph * makeGraph(int num_vertices, int max_len) {
     for (i = 0; i < num_vertices - 1; i++) {
         setBit(g->adj_mat, i, i+1, true);
         setBit(g->adj_mat, i+1, i, true);
-        //g->adj_mat[i][i+1] = true;
-        //g->adj_mat[i+1][i] = true;
     }
     return g;
 }
@@ -73,7 +71,7 @@ Graph * graphCopy(Graph * g) {
     for (i = 0; i < g->len; i++) {
         int j = 0;
         for (j = 0; j < g->len; j++) {
-            new->adj_mat[i][j] = g->adj_mat[i][j];
+            setBit(new->adj_mat, i, j, getBit(g->adj_mat, i, j));
         }
     }
     return new;
@@ -144,7 +142,7 @@ void x_property(Graph * g) {
     for (i = leftmost - 1; i > -1; i--) {
         int j = 0;
         for (j = leftmost + 1; j < n; j++) {
-            if (g->adj_mat[i][j] == true) {
+            if (getBit(g->adj_mat, i, j) == true) { // (g->adj_mat[i][j] == true) {
                 illegal_vertices[illegal_ndx] = i;
                 illegal_ndx++;
                 break;
@@ -154,8 +152,8 @@ void x_property(Graph * g) {
     //Fix order claim for each illegal vertex.
     for (i = 0; i < illegal_ndx; i++) {
         int ill_vert = illegal_vertices[i];
-        g->adj_mat[ill_vert][n] = true;
-        g->adj_mat[n][ill_vert] = true;
+        setBit(g->adj_mat, ill_vert, n, true);
+        setBit(g->adj_mat, n, ill_vert, true);
     }
     free(illegal_vertices);
 }
@@ -169,12 +167,13 @@ bool bar_property(Graph * g) {
         bool not_broken = false;
         int j = 0;
         for (j = i + 3; j < g->len; j++) {
-            if (g->adj_mat[i][j] == true) {
+            if (getBit(g->adj_mat, i, j) == true) {
                 //If any of our vertices k don't break the property,
                 //i and j are good.
                 int k = 0;
                 for (k = i + 1; k < j; k++) {
-                    not_broken = not_broken || (g->adj_mat[i][k] && g->adj_mat[j][k]);
+                    not_broken = not_broken || (getBit(g->adj_mat, i, k) && 
+                                                getBit(g->adj_mat, j, k));
                 }
                 if (not_broken == false)
                     return false;
@@ -198,10 +197,10 @@ bool fixGraph(Graph * g) {
 void deleteGraph(Graph * g) {
     int i = 0;
     for (i; i < g->max_len; i++) {
-        memset(g->adj_mat[i], 0, sizeof(bool) * g->max_len);
+        memset(g->adj_mat[i], 0, sizeof(char) * (( (g->max_len - 1) / 8 ) + 1));
         free(g->adj_mat[i]);
     }
-    memset(g->adj_mat, 0, sizeof(bool) * g->max_len);
+    memset(g->adj_mat, 0, sizeof(char) * g->max_len);
     free(g->adj_mat);
     memset(g, 0, sizeof(Graph));
     free(g);
@@ -234,7 +233,7 @@ void writeGraphs(GraphList * gl, char * filename) {
             int j = 0;
             //Vertices don't see themselves, and each edge is bidirectional.
             for (j = i+1; j < g->len; j++) {
-                if (g->adj_mat[i][j] == true) {
+                if (getBit(g->adj_mat, i, j) == true) {
                     //Output format is v1 v2\n
                     fprintf(file, "%d %d\n", i, j);
                 }
