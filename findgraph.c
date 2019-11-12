@@ -42,7 +42,6 @@ void findgraphs(int max_vertices, char * filename) {
         }
         //NOTE: Might need a threshold for writing graphs if they occupy too much
         //memory.
-        GraphList * purr = NULL;
         writeGraphs(news, filename);
         deleteGraphs(prevs);
         GraphList * temp = news;
@@ -74,14 +73,17 @@ void graph_gen(Graph * prev, GraphList * news, int vert, bool checkVert) {
         append(prev, news);
         return;
     }
-    Graph * clean = graphCopy(prev);
+    Graph * clean = NULL;
     //Only recur to the left if we don't have a new edge to add for this spot.
     if (getBit(prev->adj_mat, vert, prev->len - 1) != true) {
-
+        clean = graphCopy(prev);
         setBit(prev->adj_mat, vert, prev->len - 1, true);
         setBit(prev->adj_mat, prev->len - 1, vert, true);
         graph_gen(prev, news, vert - 1, true);
 
     }
-    graph_gen(clean, news, vert - 1, false);
+    if (clean != NULL)
+        graph_gen(clean, news, vert - 1, false);
+    else
+        graph_gen(prev, news, vert - 1, false);
 }
