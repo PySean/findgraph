@@ -243,3 +243,18 @@ void writeGraphs(GraphList * gl, char * filename) {
     }
     fclose(file);
 }
+
+void writeGraph(Graph * g, FILE * file) {
+    int i = 0;
+    for (i; i < g->len; i++) {
+        int j = 0;
+        //Vertices don't see themselves, and each edge is bidirectional.
+        for (j = i+1; j < g->len; j++) {
+            if (getBit(g->adj_mat, i, j) == true) {
+                //Output format is v1 v2\n
+                fprintf(file, "%d %d\n", i, j);
+            }
+        }
+    }
+    fprintf(file, "---\n");
+}

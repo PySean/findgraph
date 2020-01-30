@@ -1,5 +1,5 @@
-#include "stack.h"
-
+#include <stdbool.h>
+#include <stdio.h>
 
 typedef struct graph {
     //The adjacency matrix for the graph.
@@ -57,5 +57,8 @@ void deleteGraph(Graph * g);
 
 void deleteGraphs(GraphList * gl);
 
-//Writes a graph to the file specified by filename. Writes in append (w+) mode.
+//Writes a list of graphs to the file specified by filename. Writes in append (w+) mode.
 void writeGraphs(GraphList * gl, char * filename);
+
+//Writes a single graph to the file specified by the open file handle.
+void writeGraph(Graph * g, FILE * file);
