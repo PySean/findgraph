@@ -4,5 +4,5 @@
 
 
 int main(int argc, char * argv[]) {
-    findgraphs(5, "testfile");
+    findgraphs(3, "testfile");
 }

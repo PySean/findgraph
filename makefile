@@ -1,4 +1,4 @@
-objects = main.o findgraph.o graph.o graphfiles.o
+objects = main.o findgraph.o graph.o
 
 run: $(objects)
 	gcc -o run $(objects)
@@ -11,9 +11,6 @@ findgraph.o: findgraph.c
 
 graph.o: graph.c
 	gcc -g -c graph.c
-
-graphfiles.o: graphfiles.c
-	gcc -g -c graphfiles.c
 
 clean:
 	rm $(objects) run testfile
