@@ -60,6 +60,7 @@ void graph_gen(Graph * prev, FILE * output, int ndx, bool checkVert, int option)
         }
         else {
             writeGraph(prev, output);
+            deleteGraph(prev);
             return;
         }
     }
