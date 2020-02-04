@@ -56,7 +56,7 @@ void graph_gen(Graph * prev, FILE * output, int ndx, bool checkVert, int option)
             prev->len++;
             setBit(prev->adj_mat, prev->len - 1, prev->len - 2, true);
             setBit(prev->adj_mat, prev->len - 2, prev->len - 1, true);
-            //ndx--; //Avoid redundant recursive calls.
+            ndx--; //Avoid redundant recursive calls.
         }
         else {
             writeGraph(prev, output);
