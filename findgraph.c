@@ -19,9 +19,9 @@ void findgraphs(int max_vertices, char * filename) {
     //First: Initialize an initial graphlist of graphs with n = 3.
     //GraphList * prevs = makeGraphList();
     Graph * init = makeGraph(3, max_vertices);
-    FILE * outie = fopen(filename, "w+");
-    graph_gen(init, outie, init->len - 3, false, EXPLORE);
-    fclose(outie);
+    //FILE * outie = fopen(filename, "w+");
+    graph_gen(init, stdout, init->len - 3, false, EXPLORE);
+    //fclose(outie);
 }
 
 /**
