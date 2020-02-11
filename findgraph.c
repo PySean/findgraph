@@ -35,11 +35,7 @@ void findgraphs(int max_vertices, char * filename) {
     the vertex needle left and creates two scenarios.
 */
 void graph_gen(Graph * prev, FILE * output, int ndx, bool checkVert, int option) {
-    if (ndx < 0) {
-        deleteGraph(prev);
-        return;
-    }
-    //This *must* be done before the next if-block. The x_property function
+    //This *must* be done before we extend the graph. The x_property function
     //operates from the final vertex leftwards, so extending the graph before
     //doing any fixes will mess with this.
     if (checkVert == true) {
@@ -51,15 +47,19 @@ void graph_gen(Graph * prev, FILE * output, int ndx, bool checkVert, int option)
             return;
         }
     }
+    if (ndx < 0) {
+        writeGraph(prev,output);
+        deleteGraph(prev);
+        return;
+    }
+
     if (option == EXTEND) {
         if (prev->len < prev->max_len) {
             prev->len++;
             setBit(prev->adj_mat, prev->len - 1, prev->len - 2, true);
             setBit(prev->adj_mat, prev->len - 2, prev->len - 1, true);
-            ndx--; //Avoid redundant recursive calls.
         }
         else {
-            writeGraph(prev, output);
             deleteGraph(prev);
             return;
         }
@@ -74,13 +74,13 @@ void graph_gen(Graph * prev, FILE * output, int ndx, bool checkVert, int option)
         //Extend the clean copy of the graph.
         Graph * cleanEx = graphCopy(prev);
 
-        graph_gen(cleanEx, output, cleanEx->len - 1, false, EXTEND);
+        graph_gen(cleanEx, output, cleanEx->len - 2, false, EXTEND);
 
         setBit(prev->adj_mat, ndx, prev->len - 1, true);
         setBit(prev->adj_mat, prev->len - 1, ndx, true);
         modEx = graphCopy(prev);
 
-        graph_gen(modEx, output, modEx->len - 1, true, EXTEND);
+        graph_gen(modEx, output, modEx->len - 2, true, EXTEND);
         graph_gen(prev, output, ndx - 1, true, EXPLORE);
     }
     if (clean != NULL) {
