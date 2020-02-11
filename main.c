@@ -4,5 +4,10 @@
 
 
 int main(int argc, char * argv[]) {
-    findgraphs(4, "testfile");
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s: <number_of_vertices>\n", argv[0]);
+        return 1;
+    }
+    findgraphs(atoi(argv[1]), "testfile");
+    return 0;
 }
